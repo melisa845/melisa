@@ -1,26 +1,30 @@
-﻿internal class Program
+﻿using System.ComponentModel.DataAnnotations;
+
+internal class Program
 {
     private static void Main(string[] args)
-    {
-        int sayi, bolentoplam;
-        Console.WriteLine("sayı giriniz");
-        sayi=Convert.ToInt32(Console.ReadLine());
-       
-        bolentoplam = 0;
-        for (int i = 1; i < sayi; i++)
+    { Console.Write("Sayıyı Girin : ");
+        int sayi=Convert.ToInt32(Console.ReadLine());
+
+        int toplam = 0;
+        int osayi = sayi;
+        int bassayısı=osayi.ToString().Length;
+        while (sayi > 0)
         {
-            if (sayi%i==0)
-            {
-                 bolentoplam+=i;
-            }
-        }
-        if (bolentoplam == sayi)
-        {
-            Console.WriteLine("süper sayıdır");
-        }
-        else {
-            Console.WriteLine("süper sayı değildir");
+            int digit = sayi % 10; 
+            toplam += (int)Math.Pow(digit, bassayısı);
+            sayi /= 10; 
         }
 
+        // Sonucu kontrol et
+        if (toplam == osayi)
+        {
+            Console.WriteLine(osayi+"r Armstrong sayısıdır.");
+        }
+        else
+        {
+            Console.WriteLine(osayi+"irrmstrong sayısı değildir.");
+        }
+        Console.ReadKey();
     }
 }
