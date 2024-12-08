@@ -2,17 +2,25 @@
 {
     private static void Main(string[] args)
     {
-        Console.WriteLine("Bir sayı girin:");
-        int sayi = Convert.ToInt32(Console.ReadLine());
-
-        int toplam = 0;
-
-        for (int i = 1; i <= sayi; i++)
+        int sayi, bolentoplam;
+        Console.WriteLine("sayı giriniz");
+        sayi=Convert.ToInt32(Console.ReadLine());
+       
+        bolentoplam = 0;
+        for (int i = 1; i < sayi; i++)
         {
-            toplam += i;
+            if (sayi%i==0)
+            {
+                 bolentoplam+=i;
+            }
+        }
+        if (bolentoplam == sayi)
+        {
+            Console.WriteLine("süper sayıdır");
+        }
+        else {
+            Console.WriteLine("süper sayı değildir");
         }
 
-        Console.WriteLine("sayıların toplamı="+toplam);
-        Console.ReadKey();
     }
 }
