@@ -1,22 +1,45 @@
-﻿int not1, not2, not3;
-Console.Write("1.Notu Giriniz:");
-not1 = Convert.ToInt32(Console.ReadLine());
-Console.Write("2.Notu Giriniz:");
-not2 = Convert.ToInt32(Console.ReadLine());
-Console.Write("3.Notu Giriniz:");
-not3 = Convert.ToInt32(Console.ReadLine());
+﻿internal class Program
+{
+    private static void Main(string[] args)
+    {
+        List<string> ogrenciliste = new List<string>();
 
-int ortalama = (not1 + not2 + not3) / 3;
-switch(ortalama){
-    case (>=50): Console.Write("GEÇTİNİZ");
-        break;
-    case (<50):
-        Console.Write("KALDINIZ");
-        break;
-    default:
-        Console.WriteLine("Lütfen notları giriniz");
-        break;
+        int ogrencisayi = 0;
+        Console.WriteLine("ögrenci eklemek için 1'e basın hayır ise 2'ye basın lütfen");
+
+        while (true)
+        {
+            int karar = 0;
+
+            karar = Convert.ToInt32(Console.ReadLine());
+            if (karar == 1)
+            {
+                Console.WriteLine("Geziye katılacak ögrencilerin ismini giriniz");
+                ogrenciliste.Add(Console.ReadLine());
+                ogrencisayi++;
+                Console.WriteLine("Devam etmek için 1' basın");
+            }
+            else if (karar == 2)
+            {
+                Console.WriteLine("Ekleme işlemi bitti. Toplama eklenen kişi sayısı" + ogrencisayi);
+                break;
+            }
+            else {
+                Console.WriteLine("Geçersiz değer girdiniz. Lütfen tekrar deneyin.");
+            }
+
+ Console.WriteLine("Araç kaç kişi?");
+        int kapasite=Convert.ToInt32(Console.ReadLine());
+        if (ogrencisayi <= kapasite) {
+            Console.WriteLine("araç sayı yeterli");
+                }
+        else
+        {
+            Console.WriteLine("kapasite yetersiz");
+        }
+        Console.ReadLine();
+
+        }
+       
+    }
 }
-
-
-Console.ReadKey();
