@@ -1,0 +1,197 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp4
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+        }
+
+    }
+    using System;
+
+public class Dugum
+{
+    public int Veriler;
+    public Dugum Sonraki;
+    public Dugum Onceki;
+
+    public Dugum(int veriler)
+    {
+        Veriler = veriler;
+        Sonraki = Onceki = null;
+    }
+}
+
+public class CiftYonluDogrusalBagliListe
+{
+    private Dugum bas;
+
+    // Başa ekleme işlemi
+    public void BasaEkle(int veriler)
+    {
+        Dugum yeniDugum = new Dugum(veriler);
+        if (bas == null)
+        {
+            bas = yeniDugum;
+        }
+        else
+        {
+            yeniDugum.Sonraki = bas;
+            bas.Onceki = yeniDugum;
+            bas = yeniDugum;
+        }
+    }
+
+    // Sona ekleme işlemi
+    public void SonaEkle(int veriler)
+    {
+        Dugum yeniDugum = new Dugum(veriler);
+        if (bas == null)
+        {
+            bas = yeniDugum;
+        }
+        else
+        {
+            Dugum temp = bas;
+            while (temp.Sonraki != null)
+            {
+                temp = temp.Sonraki;
+            }
+            temp.Sonraki = yeniDugum;
+            yeniDugum.Onceki = temp;
+        }
+    }
+
+    // Araya ekleme işlemi
+    public void ArayaEkle(Dugum oncekiDugum, int veriler)
+    {
+        if (oncekiDugum == null)
+        {
+            Console.WriteLine("Önceki düğüm boş olamaz.");
+            return;
+        }
+        Dugum yeniDugum = new Dugum(veriler);
+        yeniDugum.Sonraki = oncekiDugum.Sonraki;
+        oncekiDugum.Sonraki = yeniDugum;
+        yeniDugum.Onceki = oncekiDugum;
+        if (yeniDugum.Sonraki != null)
+        {
+            yeniDugum.Sonraki.Onceki = yeniDugum;
+        }
+    }
+
+    // Baştan silme işlemi
+    public void BastanSil()
+    {
+        if (bas != null)
+        {
+            bas = bas.Sonraki;
+            if (bas != null)
+            {
+                bas.Onceki = null;
+            }
+        }
+    }
+
+    // Sondan silme işlemi
+    public void SondanSil()
+    {
+        if (bas == null) return;
+
+        if (bas.Sonraki == null)
+        {
+            bas = null;
+            return;
+        }
+
+        Dugum temp = bas;
+        while (temp.Sonraki != null)
+        {
+            temp = temp.Sonraki;
+        }
+        temp.Onceki.Sonraki = null;
+    }
+
+    // Aradan silme işlemi
+    public void AradanSil(int anahtar)
+    {
+        if (bas == null) return;
+
+        Dugum temp = bas;
+
+        while (temp != null && temp.Veriler != anahtar)
+        {
+            temp = temp.Sonraki;
+        }
+
+        if (temp == null) return;
+
+        if (temp == bas)
+        {
+            bas = temp.Sonraki;
+        }
+
+        if (temp.Sonraki != null)
+        {
+            temp.Sonraki.Onceki = temp.Onceki;
+        }
+
+        if (temp.Onceki != null)
+        {
+            temp.Onceki.Sonraki = temp.Sonraki;
+        }
+
+        temp = null;
+    }
+
+    // Listeyi ekrana yazdırma işlemi
+    public void Goruntule()
+    {
+        Dugum temp = bas;
+        while (temp != null)
+        {
+            Console.Write(temp.Veriler + " ");
+            temp = temp.Sonraki;
+        }
+        Console.WriteLine();
+    }
+
+    public static void Main(string[] args)
+    {
+        CiftYonluDogrusalBagliListe liste = new CiftYonluDogrusalBagliListe();
+
+        liste.BasaEkle(10);
+        liste.SonaEkle(20);
+        liste.SonaEkle(30);
+        liste.SonaEkle(40);
+
+        Console.WriteLine("Orijinal Liste:");
+        liste.Goruntule();
+
+        liste.AradanSil(30);
+
+        Console.WriteLine("30 silindikten sonra güncellenmiş liste:");
+        liste.Goruntule();
+
+        liste.ArayaEkle(liste.bas.Sonraki, 25);
+
+        Console.WriteLine("20'den sonra 25 eklendikten sonra güncellenmiş liste:");
+        liste.Goruntule();
+
+        liste.BastanSil();
+        Console.WriteLine("İlk eleman silindikten sonra güncellenmiş liste:");
+        liste.Goruntule();
+
+        liste.SondanSil();
+        Console.WriteLine("Son eleman silindikten sonra güncellenmiş liste:");
+        liste.Goruntule();
+    }
+}
+
+}
