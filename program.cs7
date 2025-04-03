@@ -1,0 +1,105 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp4
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+        }
+
+    }
+    using System;
+using System.Collections.Generic;
+
+public class HashTable
+{
+    private readonly int boyut;
+    private readonly LinkedList<KeyValuePair<string, string>>[] elemanlar;
+
+    public HashTable(int boyut)
+    {
+        this.boyut = boyut;
+        elemanlar = new LinkedList<KeyValuePair<string, string>>[boyut];
+    }
+
+    // Hash fonksiyonu, verilen anahtarın hash değerini hesaplar
+    protected int DiziPozisyonu(string anahtar)
+    {
+        int pozisyon = anahtar.GetHashCode() % boyut;
+        return Math.Abs(pozisyon);
+    }
+
+    // Hash tablosuna veri ekleme işlemi
+    public void Ekle(string anahtar, string deger)
+    {
+        int pozisyon = DiziPozisyonu(anahtar);
+        LinkedList<KeyValuePair<string, string>> bagliListe = BagliListeyiAl(pozisyon);
+        KeyValuePair<string, string> eleman = new KeyValuePair<string, string>(anahtar, deger);
+        bagliListe.AddLast(eleman);
+    }
+
+    // Hash tablosundan veri arama işlemi
+    public string Ara(string anahtar)
+    {
+        int pozisyon = DiziPozisyonu(anahtar);
+        LinkedList<KeyValuePair<string, string>> bagliListe = BagliListeyiAl(pozisyon);
+        foreach (KeyValuePair<string, string> çift in bagliListe)
+        {
+            if (çift.Key.Equals(anahtar))
+            {
+                return çift.Value;
+            }
+        }
+        return null;
+    }
+
+    // Hash tablosundaki verileri gösterme işlemi
+    public void Goruntule()
+    {
+        for (int i = 0; i < boyut; i++)
+        {
+            LinkedList<KeyValuePair<string, string>> bagliListe = elemanlar[i];
+            if (bagliListe != null)
+            {
+                foreach (KeyValuePair<string, string> çift in bagliListe)
+                {
+                    Console.WriteLine($"Anahtar: {çift.Key}, Değer: {çift.Value}");
+                }
+            }
+        }
+    }
+
+    private LinkedList<KeyValuePair<string, string>> BagliListeyiAl(int pozisyon)
+    {
+        LinkedList<KeyValuePair<string, string>> bagliListe = elemanlar[pozisyon];
+        if (bagliListe == null)
+        {
+            bagliListe = new LinkedList<KeyValuePair<string, string>>();
+            elemanlar[pozisyon] = bagliListe;
+        }
+        return bagliListe;
+    }
+
+    public static void Main(string[] args)
+    {
+        HashTable hashTable = new HashTable(10);
+        hashTable.Ekle("1", "Değer 1");
+        hashTable.Ekle("2", "Değer 2");
+        hashTable.Ekle("3", "Değer 3");
+        hashTable.Ekle("4", "Değer 4");
+
+        Console.WriteLine("Hash Tablosu İçeriği:");
+        hashTable.Goruntule();
+
+        string aramaAnahtari = "2";
+        string aramaDegeri = hashTable.Ara(aramaAnahtari);
+        Console.WriteLine($"\n'{aramaAnahtari}' anahtarı için arama sonucu: {aramaDegeri}");
+    }
+}
+
+}
