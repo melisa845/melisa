@@ -1,106 +1,95 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-// Fatura ödeme sistemi ana sınıfı
-class FaturaOdemeSistemi
+namespace ConsoleApp4
 {
-    static void Main()
+    internal class Program
     {
-        // Faturaların saklanacağı liste
-        List<Fatura> faturalar = new List<Fatura>();
-        bool devam = true;
-
-        // Ana menü döngüsü
-        while (devam)
+        static void Main(string[] args)
         {
-            Console.Clear();
-            Console.WriteLine("1. Elektrik Faturası Ekle");
-            Console.WriteLine("2. Su Faturası Ekle");
-            Console.WriteLine("3. Faturaları Görüntüle");
-            Console.WriteLine("4. Fatura Öde");
-            Console.WriteLine("5. Çıkış");
-            Console.Write("Seçiminiz: ");
-            string secim = Console.ReadLine();
+        }
 
-            // Kullanıcının seçimine göre işlemi gerçekleştir
-            if (secim == "1")
-                FaturaEkle(faturalar, "Elektrik");
-            else if (secim == "2")
-                FaturaEkle(faturalar, "Su");
-            else if (secim == "3")
-                FaturalariGoruntule(faturalar);
-            else if (secim == "4")
-                FaturaOde(faturalar);
-            else if (secim == "5")
-                devam = false; // Döngüyü sonlandırarak çıkış yap
+    }
+    using System;
+
+public class Dugum
+    {
+        public int Veriler;
+        public Dugum Sol;
+        public Dugum Sag;
+
+        public Dugum(int veriler)
+        {
+            Veriler = veriler;
+            Sol = Sag = null;
         }
     }
 
-    // Yeni bir fatura ekleme metodu
-    static void FaturaEkle(List<Fatura> faturalar, string faturaTuru)
+    public class Agac
     {
-        Console.Write("Fatura Sahibi: ");
-        string sahip = Console.ReadLine(); // Kullanıcıdan fatura sahibini al
-        Console.Write("Fatura Tutarı: ");
-        int tutar = Convert.ToInt32(Console.ReadLine()); // Kullanıcıdan fatura tutarını al
+        public Dugum Kök;
 
-        // Faturayı listeye ekle
-        faturalar.Add(new Fatura(sahip, tutar, faturaTuru));
-    }
-
-    // Faturaları listeleme metodu
-    static void FaturalariGoruntule(List<Fatura> faturalar)
-    {
-        foreach (var f in faturalar)
+        public Agac()
         {
-            // Fatura bilgilerini yazdır
-            Console.WriteLine(f.Sahip + " - " + f.Tutar + " -" + f.FaturaTuru);
-            if (f.Odendi == false)
-            {
-                Console.WriteLine("Ödenmedi");
-            }
-            else
-            {
-                Console.WriteLine("Ödendi");
-            }
+            Kök = null;
         }
-        Console.ReadLine(); // Kullanıcı devam etmek için bir tuşa basana kadar bekle
-    }
 
-    // Fatura ödeme metodu
-    static void FaturaOde(List<Fatura> faturalar)
-    {
-        Console.Write("Fatura Sahibi: ");
-        string sahip = Console.ReadLine(); // Kullanıcıdan fatura sahibini al
-
-        // Ödenmemiş faturayı bul
-        var fatura = faturalar.Find(f => f.Sahip == sahip && !f.Odendi);
-        if (fatura != null)
+        // Preorder Traversal (Önce-Kök Dolaşma)
+        public void Preorder(Dugum dugum)
         {
-            fatura.Odendi = true; // Faturayı ödendi olarak işaretle
-            Console.WriteLine("Fatura ödendi.");
+            if (dugum == null) return;
+
+            Console.Write(dugum.Veriler + " ");
+            Preorder(dugum.Sol);
+            Preorder(dugum.Sag);
         }
-        else
+
+        // Inorder Traversal (İç-Kök Dolaşma)
+        public void Inorder(Dugum dugum)
         {
-            Console.WriteLine("Fatura bulunamadı veya zaten ödendi.");
+            if (dugum == null) return;
+
+            Inorder(dugum.Sol);
+            Console.Write(dugum.Veriler + " ");
+            Inorder(dugum.Sag);
+        }
+
+        // Postorder Traversal (Sonra-Kök Dolaşma)
+        public void Postorder(Dugum dugum)
+        {
+            if (dugum == null) return;
+
+            Postorder(dugum.Sol);
+            Postorder(dugum.Sag);
+            Console.Write(dugum.Veriler + " ");
+        }
+
+        public static void Main(string[] args)
+        {
+            Agac agac = new Agac();
+            agac.Kök = new Dugum(1);
+            agac.Kök.Sol = new Dugum(2);
+            agac.Kök.Sag = new Dugum(3);
+            agac.Kök.Sol.Sol = new Dugum(4);
+            agac.Kök.Sol.Sag = new Dugum(5);
+            agac.Kök.Sag.Sol = new Dugum(6);
+            agac.Kök.Sag.Sag = new Dugum(7);
+
+            Console.WriteLine("Preorder Traversal:");
+            agac.Preorder(agac.Kök);
+            Console.WriteLine();
+
+            Console.WriteLine("Inorder Traversal:");
+            agac.Inorder(agac.Kök);
+            Console.WriteLine();
+
+            Console.WriteLine("Postorder Traversal:");
+            agac.Postorder(agac.Kök);
+            Console.WriteLine();
         }
     }
-}
 
-// Fatura sınıfı, faturanın özelliklerini ve yapıcı metodunu içerir
-class Fatura
-{
-    public string Sahip { get; set; } // Fatura sahibinin adı
-    public decimal Tutar { get; set; } // Fatura tutarı
-    public string FaturaTuru { get; set; } // Fatura türü (Elektrik, Su vb.)
-    public bool Odendi { get; set; } // Faturanın ödenme durumu
-
-    // Fatura sınıfının yapıcı metodu
-    public Fatura(string sahip, decimal tutar, string faturaTuru)
-    {
-        Sahip = sahip;
-        Tutar = tutar;
-        FaturaTuru = faturaTuru;
-        Odendi = false; // Varsayılan olarak fatura ödenmemiş
-    }
 }
